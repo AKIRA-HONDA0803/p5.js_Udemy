@@ -11,13 +11,25 @@ let b_x = 300;
 let b_y = 100;
 let camera_x = 0;
 let camera_y = 0;
+// 背景の定義
+let x_list = [];
+let y_list = [];
 
 function setup(){
   createCanvas(600, 400);
+  for(let i=0;i<500;i++){
+    x_list[i] = random(0, 600);
+    y_list[i] = i * -50;
+  }
 }
 
 function draw(){
   background(30);
+
+  for(let i=0;i<x_list.length;i++){
+    fill(255);
+    ellipse(x_list[i] - camera_x, y_list[i] - camera_y, 10, 10);
+  }
   dy = dy + 1;
   x = x + dx;
   y = y + dy;
@@ -26,8 +38,21 @@ function draw(){
   }
   let hit = isHit(x, y, 30, 30, b_x, b_y, 100, 20);
   if(hit == 1){
-    dy = -40;
+    // 当たったら
+    if(dy > 0){
+      dy = -40;
+
+      // ブロックの残存する高さ
+      b_y = b_y - 600;
+      b_x = random(0,500);
+    }
   }
+
+  // 画面酔い制御
+  if(camera_y > y -100){
+    camera_y = y - 100;
+  }
+
   camera_y = y - 300;
   // 色を決める
   fill(255);
